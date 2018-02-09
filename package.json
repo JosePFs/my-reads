@@ -2,6 +2,10 @@
   "name": "my-reads",
   "version": "0.0.1",
   "description": "Audacity React NanoDegree - fundamentals course project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JosePFs/my-reads.git"
+  },
   "author": "José Puente Fuentes",
   "contributors": [
     "José Puente <jpuentefs@gmail.com>"
