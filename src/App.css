@@ -103,6 +103,15 @@ body, .app {
   padding: 80px 10px 20px;
 }
 
+.no-books-shelf,
+.search-not-found {
+  color: #ccc;
+}
+
+.search-not-found {
+  margin-left: 50px;
+}
+
 /* books grid */
 
 .books-grid {
