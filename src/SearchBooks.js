@@ -17,24 +17,10 @@ class SearchBooks extends Component {
   }
 
   search = (query) => {
-    BooksAPI.search(query.trim()).then((result) => {
-      let books = [];
-      if (result && !result.error) {
-        books = result.map((book) => {
-          for (let shelf of Object.keys(this.props.books)) {
-            const bookInShelf = this.props.books[shelf].find((bookInShelf) => (
-              book.id === bookInShelf.id
-            ));
-            if (bookInShelf) {
-              book.shelf = bookInShelf.shelf;
-              return book;              
-            }
-          }
-          book.shelf = 'none';
-          return book;
-        });
+    BooksAPI.search(query.trim()).then((books) => {
+      if (books && !books.error) {
+        this.setState(({books}));        
       }
-      this.setState(({books}));
     });
     this.setState(({
       query: query.trim()          
@@ -45,6 +31,18 @@ class SearchBooks extends Component {
     const { onChangeBookState } = this.props;
     const { query, books } = this.state;
     
+    const bookShelf = books.map((book) => {
+      const bookInShelf = this.props.books.find((bookIn) => (
+        bookIn.id === book.id
+      ));
+      if (bookInShelf) {
+        book.shelf = bookInShelf.shelf;
+        return book;              
+      }
+      book.shelf = 'none';
+      return book;
+    });
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -59,13 +57,13 @@ class SearchBooks extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          {query.length > 0 && books.length === 0 && (
+          {query.length > 0 && bookShelf.length === 0 && (
             <div className="search-not-found">
               <span>No results</span>  
             </div>
           )}
           <ol className="books-grid">
-          {books.map((book) => (
+          {bookShelf.map((book) => (
               <li key={book.id}>
                 <Book 
                   book={book}

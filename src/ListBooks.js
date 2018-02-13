@@ -12,6 +12,20 @@ class ListBooks extends Component {
 
   render() {
     const { books, onChangeBookState } = this.props;
+    const currentlyReading = [];
+    const wantToRead = [];
+    const read = [];
+    books.forEach(book => {
+      if (book.shelf === 'currentlyReading') {
+        currentlyReading.push(book);
+      }
+      if (book.shelf === 'wantToRead') {
+        wantToRead.push(book);
+      }
+      if (book.shelf === 'read') {
+        read.push(book);
+      }
+    });
 
     return (
       <div className="list-books">
@@ -21,17 +35,17 @@ class ListBooks extends Component {
         <div className="list-books-content">
           <Bookshelf
             title='Currently Reading'
-            books={books.currentlyReading}
+            books={currentlyReading}
             onChangeBookState={onChangeBookState}
           />
           <Bookshelf
             title='Want to Read'
-            books={books.wantToRead}
+            books={wantToRead}
             onChangeBookState={onChangeBookState}
           />
           <Bookshelf
             title='Read'
-            books={books.read}
+            books={read}
             onChangeBookState={onChangeBookState}
           />
         </div>

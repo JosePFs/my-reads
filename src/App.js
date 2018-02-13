@@ -8,41 +8,31 @@ import SearchBooks from './SearchBooks';
 
 class BooksApp extends React.Component {
   state = {
-    books: {
-      currentlyReading: [],
-      wantToRead: [],
-      read: [],
-      none: []
-    }
+    books: []
   }
   
   changeBookState = (book, shelf) => {
     BooksAPI.update(book, shelf).then((booksShelfes) => {
-      this.setState((state) => {
-        state.books[book.shelf] = state.books[book.shelf].filter((bookInShelf) => (
-          bookInShelf.id !== book.id
-        ));
-        book.shelf = shelf;
-        state.books[shelf].push(book);
-        return state;
-      });
+      this.setState((state) => ({
+        books: this.state.books.map((book) => {
+          for (let [shelf, booksIds] of Object.entries(booksShelfes)) {
+            if (booksIds.find((bookId) => (
+              bookId === book.id
+            ))) {
+              book.shelf = shelf;
+              return book;              
+            }
+          }
+          book.shelf = 'none';
+          return book;
+        })
+      }));
     });
   };
 
   componentDidMount() {
-    BooksAPI.getAll().then((allBooks) => {
-      allBooks.forEach(book => {
-        if (book.shelf === 'currentlyReading') {
-          this.state.books.currentlyReading.push(book);
-        }
-        if (book.shelf === 'wantToRead') {
-          this.state.books.wantToRead.push(book);
-        }
-        if (book.shelf === 'read') {
-          this.state.books.read.push(book);
-        }
-    });
-      this.setState(this.state);
+    BooksAPI.getAll().then((books) => {
+      this.setState({books});
     });
   }
 
